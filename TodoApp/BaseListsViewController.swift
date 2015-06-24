@@ -7,12 +7,11 @@
 //
 
 import UIKit
-import EventKit
 
 class BaseListsViewController : UITableViewController
 {
     // MARK: - Properties
-    var sortedLists : [EKCalendar] = [EKCalendar]()
+    var sortedLists : [TodoList] = [TodoList]()
     
     // MARK: - View Lifecycle
     
@@ -24,35 +23,23 @@ class BaseListsViewController : UITableViewController
         rc.addTarget(self, action: Selector("onRefresh"), forControlEvents: UIControlEvents.ValueChanged)
         self.refreshControl = rc
                 
-        if EventHelper.sharedInstance.accessRequested == false {
-            EventHelper.sharedInstance.requestAccess({ (granted : Bool, error : NSError!) -> Void in
-                self.onRefresh()
-            })
-        }
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if EventHelper.sharedInstance.accessGranted {
-            onRefresh()
-        }
     }
     
     // MARK: - Responders
     
     func onRefresh()
     {
-        var calendarEntries = [EKCalendar : [EKReminder]]()
+        var calendarEntries = [TodoList : [TodoItem]]()
         
-        let objs = EventHelper.sharedInstance.eventStore.calendarsForEntityType(EKEntityTypeReminder)
+        let objs = TodoStore.sharedInstance.lists
         
-        if let calendars = objs as? [EKCalendar] {
-            
-            self.sortedLists = calendars.sorted({ (lhs, rhs) -> Bool in
-                lhs.title < rhs.title
-            })
-        }
+        self.sortedLists = objs.sorted({ (lhs, rhs) -> Bool in
+            lhs.title < rhs.title
+        })
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.tableView.reloadData()
@@ -60,7 +47,7 @@ class BaseListsViewController : UITableViewController
         })
     }
     
-    func listWasSelected(calendar : EKCalendar) {
+    func listWasSelected(list : TodoList) {
         preconditionFailure("This function must be overriden!")
     }
     

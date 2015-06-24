@@ -7,14 +7,13 @@
 //
 
 import UIKit
-import EventKit
 
 class ChangeListViewController : BaseListsViewController
 {
-    var reminder : EKReminder!
+    var item : TodoItem!
     
-    override func listWasSelected(calendar : EKCalendar) {       
-        reminder.calendar = calendar
+    override func listWasSelected(list : TodoList) {
+        item.list = list
         self.navigationController?.popViewControllerAnimated(true)
     }
     

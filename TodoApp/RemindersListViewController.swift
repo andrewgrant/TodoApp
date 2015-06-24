@@ -7,14 +7,13 @@
 //
 
 import UIKit
-import EventKit
 
 class RemindersListViewController : UITableViewController, UITextFieldDelegate
 {
     // MARK: Properties
     
-    var calendar : EKCalendar?
-    var reminders = [EKReminder]()
+    var list : TodoList?
+    var items = [TodoItem]()
     
     @IBOutlet var editBarButton : UIBarButtonItem!
     
@@ -23,7 +22,7 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.rightBarButtonItem = self.editBarButton
-        self.title = calendar?.title
+        self.title = list?.title
         
         let rc = UIRefreshControl()
         refreshControl?.addTarget(self, action: Selector("onRefresh:"), forControlEvents: UIControlEvents.ValueChanged)
@@ -43,13 +42,13 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
             // the text field
             if let tvc = sender as? UITableViewCell {
                 let indexPath = self.tableView.indexPathForCell(tvc)!
-                controller.reminder = self.reminders[indexPath.row]
+                controller.item = self.items[indexPath.row]
             }
             else if let tf = sender as? UITextField {
                 controller.defaultReminderName = tf.text
             }
             
-            controller.owningCalendar = self.calendar
+            controller.owningList = self.list
         }
     }
 
@@ -64,44 +63,33 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
     
     @IBAction func onCompleteButton(sender : UIButton)
     {
-        let reminder = self.reminders[sender.tag]
+        let item = self.items[sender.tag]
         
-        reminder.completed = !reminder.completed
-        sender.setTitle(reminder.completed ? "🔳" : "◻️", forState: UIControlState.Normal)
+        item.completed = !item.completed
+        sender.setTitle(item.completed ? "🔳" : "◻️", forState: UIControlState.Normal)
         
-        EventHelper.sharedInstance.eventStore.saveReminder(reminder, commit: true, error: nil)
+        TodoStore.sharedInstance.saveItem(item, error: nil)
     }
     
     
     func onRefresh(sender : AnyObject?)
     {
-        let lists = [EKCalendar](arrayLiteral: calendar!)
+        if let list = self.list {
         
-        let pred = EventHelper.sharedInstance.eventStore.predicateForRemindersInCalendars(lists)
-        
-        EventHelper.sharedInstance.eventStore.fetchRemindersMatchingPredicate(pred, completion: { (objects : [AnyObject]!) -> Void in
+            self.items = list.items
             
-            if let rem = objects as? [EKReminder] {
-                
-                self.reminders = rem
-            }
-            
-            self.reminders.sort({ (lhs, rhs) -> Bool in
+            self.items.sort({ (lhs, rhs) -> Bool in
                 
                 if lhs.creationDate == nil || rhs.creationDate == nil {
                     return false
                 }
                 
-                return lhs.creationDate?.compare(rhs.creationDate) == NSComparisonResult.OrderedAscending
+                return lhs.creationDate!.compare(rhs.creationDate!) == NSComparisonResult.OrderedAscending
             })
-                        
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.refreshControl?.endRefreshing()
-                self.tableView.reloadData()
-                self.refreshControl?.endRefreshing()
-            })
-
-        })
+        }
+        
+        self.tableView.reloadData()
+        self.refreshControl?.endRefreshing()
     }
     
     // MARK: - Textfield Delegate
@@ -120,18 +108,18 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.reminders.count + 1
+        return self.items.count + 1
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         var cell : UITableViewCell
         
-        if (indexPath.row < self.reminders.count)
+        if (indexPath.row < self.items.count)
         {
             let reminderCell = tableView.dequeueReusableCellWithIdentifier("ReminderCell") as! ReminderTableViewCell
             
-            let reminder = self.reminders[indexPath.row]
+            let reminder = self.items[indexPath.row]
             
             reminderCell.titleLabel.text = reminder.title
             reminderCell.completeButton.setTitle(reminder.completed ? "🔳" : "◻️", forState: UIControlState.Normal)
@@ -150,11 +138,11 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
     }
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == UITableViewCellEditingStyle.Delete && indexPath.row < self.reminders.count {
-            let rem = self.reminders[indexPath.row]
+        if editingStyle == UITableViewCellEditingStyle.Delete && indexPath.row < self.items.count {
+            let rem = self.items[indexPath.row]
             
             var error : NSError?
-            EventHelper.sharedInstance.eventStore.removeReminder(rem, commit: true, error: &error)
+            TodoStore.sharedInstance.removeItem(rem, error: &error)
             
             if error != nil {
                 let msg = UIAlertController(title: nil, message: "Error Deleting Reminder: " + error!.description, preferredStyle: UIAlertControllerStyle.Alert)
@@ -168,6 +156,6 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
     }
     
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return indexPath.row < self.reminders.count
+        return indexPath.row < self.items.count
     }
 }

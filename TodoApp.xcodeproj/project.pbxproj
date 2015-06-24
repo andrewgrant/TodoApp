@@ -15,11 +15,16 @@
 		49C14A921B39AF2B00BD80D9 /* ChangeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C14A851B39AF2B00BD80D9 /* ChangeListViewController.swift */; };
 		49C14A931B39AF2B00BD80D9 /* EditListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C14A861B39AF2B00BD80D9 /* EditListViewController.swift */; };
 		49C14A941B39AF2B00BD80D9 /* EditRemindersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C14A871B39AF2B00BD80D9 /* EditRemindersViewController.swift */; };
-		49C14A951B39AF2B00BD80D9 /* EventHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C14A881B39AF2B00BD80D9 /* EventHelper.swift */; };
 		49C14A961B39AF2B00BD80D9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49C14A891B39AF2B00BD80D9 /* Images.xcassets */; };
 		49C14A981B39AF2B00BD80D9 /* ListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C14A8B1B39AF2B00BD80D9 /* ListsViewController.swift */; };
 		49C14A991B39AF2B00BD80D9 /* RemindersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C14A8C1B39AF2B00BD80D9 /* RemindersListViewController.swift */; };
 		49C14A9A1B39AF2B00BD80D9 /* ReminderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C14A8D1B39AF2B00BD80D9 /* ReminderTableViewCell.swift */; };
+		49C14A9D1B39B1A800BD80D9 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C14A9C1B39B1A800BD80D9 /* TodoItem.swift */; };
+		49C14A9E1B39B1A800BD80D9 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C14A9C1B39B1A800BD80D9 /* TodoItem.swift */; };
+		49C14AA01B39B1B500BD80D9 /* TodoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C14A9F1B39B1B500BD80D9 /* TodoList.swift */; };
+		49C14AA11B39B1B500BD80D9 /* TodoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C14A9F1B39B1B500BD80D9 /* TodoList.swift */; };
+		49C14AA31B39B6D100BD80D9 /* TodoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C14AA21B39B6D100BD80D9 /* TodoStore.swift */; };
+		49C14AA41B39B6D100BD80D9 /* TodoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C14AA21B39B6D100BD80D9 /* TodoStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,12 +49,14 @@
 		49C14A851B39AF2B00BD80D9 /* ChangeListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeListViewController.swift; sourceTree = "<group>"; };
 		49C14A861B39AF2B00BD80D9 /* EditListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditListViewController.swift; sourceTree = "<group>"; };
 		49C14A871B39AF2B00BD80D9 /* EditRemindersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditRemindersViewController.swift; sourceTree = "<group>"; };
-		49C14A881B39AF2B00BD80D9 /* EventHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventHelper.swift; sourceTree = "<group>"; };
 		49C14A891B39AF2B00BD80D9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		49C14A8A1B39AF2B00BD80D9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		49C14A8B1B39AF2B00BD80D9 /* ListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
 		49C14A8C1B39AF2B00BD80D9 /* RemindersListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemindersListViewController.swift; sourceTree = "<group>"; };
 		49C14A8D1B39AF2B00BD80D9 /* ReminderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReminderTableViewCell.swift; sourceTree = "<group>"; };
+		49C14A9C1B39B1A800BD80D9 /* TodoItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
+		49C14A9F1B39B1B500BD80D9 /* TodoList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoList.swift; sourceTree = "<group>"; };
+		49C14AA21B39B6D100BD80D9 /* TodoStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +80,7 @@
 		491500CB1B14C3F700D0A36B = {
 			isa = PBXGroup;
 			children = (
+				49C14A9B1B39B18B00BD80D9 /* Shared */,
 				49C14A7E1B39AF2B00BD80D9 /* TodoApp */,
 				49C14A791B39AF1600BD80D9 /* TodoAppTests */,
 				491500D51B14C3F700D0A36B /* Products */,
@@ -107,7 +115,6 @@
 				49C14A851B39AF2B00BD80D9 /* ChangeListViewController.swift */,
 				49C14A861B39AF2B00BD80D9 /* EditListViewController.swift */,
 				49C14A871B39AF2B00BD80D9 /* EditRemindersViewController.swift */,
-				49C14A881B39AF2B00BD80D9 /* EventHelper.swift */,
 				49C14A891B39AF2B00BD80D9 /* Images.xcassets */,
 				49C14A8A1B39AF2B00BD80D9 /* Info.plist */,
 				49C14A8B1B39AF2B00BD80D9 /* ListsViewController.swift */,
@@ -115,6 +122,16 @@
 				49C14A8D1B39AF2B00BD80D9 /* ReminderTableViewCell.swift */,
 			);
 			path = TodoApp;
+			sourceTree = "<group>";
+		};
+		49C14A9B1B39B18B00BD80D9 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				49C14AA21B39B6D100BD80D9 /* TodoStore.swift */,
+				49C14A9C1B39B1A800BD80D9 /* TodoItem.swift */,
+				49C14A9F1B39B1B500BD80D9 /* TodoList.swift */,
+			);
+			path = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,7 +190,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 491500CF1B14C3F700D0A36B /* Build configuration list for PBXProject "EditReminders" */;
+			buildConfigurationList = 491500CF1B14C3F700D0A36B /* Build configuration list for PBXProject "TodoApp" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -217,10 +234,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49C14A9D1B39B1A800BD80D9 /* TodoItem.swift in Sources */,
+				49C14AA01B39B1B500BD80D9 /* TodoList.swift in Sources */,
 				49C14A981B39AF2B00BD80D9 /* ListsViewController.swift in Sources */,
 				49C14A991B39AF2B00BD80D9 /* RemindersListViewController.swift in Sources */,
 				49C14A911B39AF2B00BD80D9 /* BaseListsViewController.swift in Sources */,
-				49C14A951B39AF2B00BD80D9 /* EventHelper.swift in Sources */,
+				49C14AA31B39B6D100BD80D9 /* TodoStore.swift in Sources */,
 				49C14A931B39AF2B00BD80D9 /* EditListViewController.swift in Sources */,
 				49C14A9A1B39AF2B00BD80D9 /* ReminderTableViewCell.swift in Sources */,
 				49C14A941B39AF2B00BD80D9 /* EditRemindersViewController.swift in Sources */,
@@ -233,6 +252,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49C14AA11B39B1B500BD80D9 /* TodoList.swift in Sources */,
+				49C14AA41B39B6D100BD80D9 /* TodoStore.swift in Sources */,
+				49C14A9E1B39B1A800BD80D9 /* TodoItem.swift in Sources */,
 				49C14A7C1B39AF1600BD80D9 /* EditRemindersTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -407,7 +429,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		491500CF1B14C3F700D0A36B /* Build configuration list for PBXProject "EditReminders" */ = {
+		491500CF1B14C3F700D0A36B /* Build configuration list for PBXProject "TodoApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				491500F11B14C3F700D0A36B /* Debug */,

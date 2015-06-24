@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import EventKit
 
 
 class EditListViewController : UITableViewController
@@ -16,7 +15,7 @@ class EditListViewController : UITableViewController
     @IBOutlet var saveBarButton : UIBarButtonItem!
     @IBOutlet var titleTextField : UITextField!
     
-    var editList : EKCalendar!
+    var editList : TodoList!
     
     // MARK: - View lifecycle
     
@@ -40,7 +39,7 @@ class EditListViewController : UITableViewController
             
             var error : NSError?
             
-            EventHelper.sharedInstance.eventStore.saveCalendar(editList, commit: true, error: &error)
+            TodoStore.sharedInstance.saveList(editList, error: &error)
             
             if error != nil {
                 println(error!.description)
@@ -55,16 +54,7 @@ class EditListViewController : UITableViewController
         if count(titleTextField.text) > 0 {
             
             // create a new list, it will be saved when we disappear
-            editList = EKCalendar(forEntityType: EKEntityTypeReminder, eventStore: EventHelper.sharedInstance.eventStore)
-            
-            for source in EventHelper.sharedInstance.eventStore.sources() {
-                
-                let type : EKSourceType = source.sourceType!
-                if type.value == EKSourceTypeLocal.value {
-                    editList.source = source as! EKSource
-                    break
-                }
-            }
+            editList = TodoList(title: titleTextField.text, store: TodoStore.sharedInstance)
             
             self.navigationController?.popViewControllerAnimated(true)
         }

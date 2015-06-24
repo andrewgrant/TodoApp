@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import EventKit
 
 class ListsViewController : BaseListsViewController {
     
@@ -25,13 +24,13 @@ class ListsViewController : BaseListsViewController {
     }
     
     
-    override func listWasSelected(calendar: EKCalendar) {
+    override func listWasSelected(list: TodoList) {
         if (self.tableView.editing) {
             
-            self.performSegueWithIdentifier("EditList", sender: calendar)
+            self.performSegueWithIdentifier("EditList", sender: list)
         }
         else {
-            self.performSegueWithIdentifier("ViewList", sender: calendar)
+            self.performSegueWithIdentifier("ViewList", sender: list)
         }
     }
     
@@ -39,7 +38,7 @@ class ListsViewController : BaseListsViewController {
         let calendar = self.sortedLists[indexPath.row]
         
         var error : NSError?
-        EventHelper.sharedInstance.eventStore.removeCalendar(calendar, commit: true, error: &error)
+        TodoStore.sharedInstance.removeList(calendar, error: &error)
         
         if error != nil {
             let text = error!.description
@@ -64,11 +63,11 @@ class ListsViewController : BaseListsViewController {
             
             let vc = segue.destinationViewController as! EditListViewController
             
-            vc.editList = sender as? EKCalendar            
+            vc.editList = sender as? TodoList
         }
         else if segue.identifier == "ViewList" {
             let vc = segue.destinationViewController as! RemindersListViewController
-            vc.calendar = sender as? EKCalendar
+            vc.list = sender as? TodoList
         }
     }
     
