@@ -16,6 +16,11 @@ class TodoStore {
     var lists = [TodoList]()
     
     
+    init () {
+        loadDocument()
+    }
+    
+    
     func removeList(list : TodoList, error : NSErrorPointer) {
         
     }
@@ -30,6 +35,43 @@ class TodoStore {
     
     func removeItem(item: TodoItem, error : NSErrorPointer) {
         
+    }
+    
+    private func documentLocation() -> NSURL {
+        
+        let directories = NSFileManager.defaultManager().URLsForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomains: NSSearchPathDomainMask.UserDomainMask)
+        
+        return directories.first as! NSURL
+    }
+    
+    func loadDocument() {
+        let path = documentLocation().URLByAppendingPathComponent("Todo.dat")
+
+        if let data = NSData(contentsOfURL: path) {
+            
+            let archive = NSKeyedUnarchiver(forReadingWithData: data)
+            
+            if let newLists = archive.decodeObjectForKey("lists") as? [TodoList] {
+                lists = newLists
+            }
+            else {
+                lists = [TodoList]()
+            }
+        }
+    }
+    
+    func saveDocument() {
+        
+        let path = documentLocation().URLByAppendingPathComponent("Todo.dat")
+        
+        let data = NSMutableData()
+        let archive = NSKeyedArchiver(forWritingWithMutableData: data)
+
+        archive.encodeObject(lists, forKey: "lists")
+        
+        archive.finishEncoding()
+        
+        data.writeToURL(path, atomically: true)        
     }
     
 }
