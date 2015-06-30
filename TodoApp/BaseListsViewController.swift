@@ -22,11 +22,13 @@ class BaseListsViewController : UITableViewController
         let rc = UIRefreshControl()
         rc.addTarget(self, action: Selector("onRefresh"), forControlEvents: UIControlEvents.ValueChanged)
         self.refreshControl = rc
-                
+        
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        onRefresh()
     }
     
     // MARK: - Responders

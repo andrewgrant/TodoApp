@@ -28,7 +28,7 @@ class EditReminderViewController : UITableViewController
         if item == nil {
             // If no reminder provided create a new one and set buttons to save/cancel
             item = TodoItem(store: TodoStore.sharedInstance)
-            item.list = owningList
+            item.parentUuid = owningList?.uuid
             item.title = self.defaultReminderName
             self.navigationItem.rightBarButtonItem = self.saveButton
             self.navigationItem.leftBarButtonItem = self.cancelButton
@@ -39,7 +39,7 @@ class EditReminderViewController : UITableViewController
         super.viewWillAppear(animated)
         
         self.eventNameTextField?.text = self.item?.title
-        self.listTableViewCell.detailTextLabel!.text = self.item?.list?.title
+        self.listTableViewCell.detailTextLabel!.text = self.owningList?.title
         
         if self.item.priority <= 4 {
             self.prioritySegments.selectedSegmentIndex = self.item.priority

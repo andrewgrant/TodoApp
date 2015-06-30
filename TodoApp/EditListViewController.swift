@@ -54,7 +54,7 @@ class EditListViewController : UITableViewController
         if count(titleTextField.text) > 0 {
             
             // create a new list, it will be saved when we disappear
-            editList = TodoList(title: titleTextField.text, store: TodoStore.sharedInstance)
+            editList = TodoList(title: titleTextField.text)
             
             self.navigationController?.popViewControllerAnimated(true)
         }

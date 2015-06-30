@@ -76,16 +76,11 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
     {
         if let list = self.list {
         
-            self.items = list.items
-            
-            self.items.sort({ (lhs, rhs) -> Bool in
-                
-                if lhs.creationDate == nil || rhs.creationDate == nil {
-                    return false
-                }
-                
-                return lhs.creationDate!.compare(rhs.creationDate!) == NSComparisonResult.OrderedAscending
-            })
+            if let newItems = TodoStore.sharedInstance.itemsInList(list) {
+                self.items = newItems.sorted({ (lhs, rhs) -> Bool in
+                    return lhs.creationDate.compare(rhs.creationDate) == NSComparisonResult.OrderedAscending
+                })
+            }
         }
         
         self.tableView.reloadData()

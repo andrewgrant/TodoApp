@@ -3,7 +3,7 @@
 //  EditReminders
 //
 //  Created by Andrew Grant on 5/31/15.
-//  Copyright (c) 2015 Code Before Dawn, Inc. All rights reserved.
+//  Copyright (c) 2015 Andrew Grant. All rights reserved.
 //
 
 import UIKit

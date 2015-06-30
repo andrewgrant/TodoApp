@@ -13,7 +13,7 @@ class ChangeListViewController : BaseListsViewController
     var item : TodoItem!
     
     override func listWasSelected(list : TodoList) {
-        item.list = list
+        item.parentUuid = list.uuid
         self.navigationController?.popViewControllerAnimated(true)
     }
     
