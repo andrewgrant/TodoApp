@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:EditReminders.xcodeproj">
+      location = "self:/Users/Andrew/Development/TodoApp/TodoApp.xcodeproj">
    </FileRef>
 </Workspace>

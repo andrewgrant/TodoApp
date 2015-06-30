@@ -22,9 +22,10 @@ class TodoItem : NSObject, Hashable, NSCoding {
         return uuid!.hashValue
     }
     
-    init (store : TodoStore) {
-        title = "New Item"
-        creationDate = NSDate()
+    init (title : String) {
+        self.title = title
+        self.uuid = NSUUID().UUIDString
+        self.creationDate = NSDate()
         super.init()
 
     }

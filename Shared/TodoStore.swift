@@ -71,8 +71,15 @@ class TodoStore : NSObject {
                 _items[parentUuid]!.append(item)
             }
         }
-        else {
-            // TODO - return error here about saving an item with an unsaved/set parent list
+        else  {
+            
+            let userInfo = [NSLocalizedDescriptionKey : "Error: Parent item is nill or as not been saved"]
+            let errorVal  = NSError(domain: "TodoAppDomain", code: -1, userInfo: userInfo)
+            
+            if error != nil {
+                error.memory = errorVal
+            }
+            println(errorVal.description)
         }
     }
     
