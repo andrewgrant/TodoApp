@@ -10,7 +10,7 @@ import UIKit
 
 class ChangeListViewController : BaseListsViewController
 {
-    var item : TodoItem!
+    var item : TodoEntry!
     
     override func listWasSelected(list : TodoList) {
         item.parentUuid = list.uuid

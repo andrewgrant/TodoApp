@@ -18,31 +18,54 @@ class EditReminderViewController : UITableViewController
     @IBOutlet var cancelButton : UIBarButtonItem!
     @IBOutlet var saveButton : UIBarButtonItem!
     
-    var item : TodoItem!
+    var item : TodoEntry!
     var owningList : TodoList?
     var defaultReminderName  = "New Reminder"
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
     
     // MARK: - View lifecycle
     override func viewDidLoad() {
         
         if item == nil {
             // If no reminder provided create a new one and set buttons to save/cancel
-            item = TodoItem(title: self.defaultReminderName)
+            item = TodoEntry(title: self.defaultReminderName)
             item.parentUuid = owningList?.uuid
             self.navigationItem.rightBarButtonItem = self.saveButton
             self.navigationItem.leftBarButtonItem = self.cancelButton
-        }        
+        }
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("onObjectChange:"), name: TodoStore.TSObjectsUpdatedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("onObjectChange:"), name: TodoStore.TSObjectsRemovedNotification, object: nil)
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
+    func onObjectChange(notification: NSNotification) {
         
+        let userInfo = notification.userInfo as? [String: AnyObject]
+        
+        if let uuids = userInfo?["uuids"] as? [String] {
+            if find(uuids, item.uuid) != nil {
+                updateObject()
+            }
+        }
+    }
+    
+    func updateObject()  {
         self.eventNameTextField?.text = self.item?.title
         self.listTableViewCell.detailTextLabel!.text = self.owningList?.title
         
         if self.item.priority <= 4 {
             self.prioritySegments.selectedSegmentIndex = self.item.priority
         }
+    }
+
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.updateObject()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -57,7 +80,7 @@ class EditReminderViewController : UITableViewController
 
             var error : NSError?
             
-            TodoStore.sharedInstance.saveItem(item, error: &error)
+            TodoStore.sharedInstance.saveObject(item, error: &error)
             
             if error != nil {
                 let msg = UIAlertController(title: nil, message: "Error Saving Reminder: " + error!.description, preferredStyle: UIAlertControllerStyle.Alert)

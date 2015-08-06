@@ -15,6 +15,10 @@ class BaseListsViewController : UITableViewController
     
     // MARK: - View Lifecycle
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -23,6 +27,9 @@ class BaseListsViewController : UITableViewController
         rc.addTarget(self, action: Selector("onRefresh"), forControlEvents: UIControlEvents.ValueChanged)
         self.refreshControl = rc
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("onObjectChange:"), name: TodoStore.TSObjectsUpdatedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("onObjectChange:"), name: TodoStore.TSObjectsRemovedNotification, object: nil)
+
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -33,10 +40,11 @@ class BaseListsViewController : UITableViewController
     
     // MARK: - Responders
     
-    func onRefresh()
-    {
-        var calendarEntries = [TodoList : [TodoItem]]()
-        
+    func onObjectChange(obj : AnyObject?) {
+        postRefresh() // brute force
+    }
+    
+    func postRefresh(){
         let objs = TodoStore.sharedInstance.lists
         
         self.sortedLists = objs.sorted({ (lhs, rhs) -> Bool in
@@ -47,6 +55,15 @@ class BaseListsViewController : UITableViewController
             self.tableView.reloadData()
             self.refreshControl?.endRefreshing()
         })
+
+    }
+    
+    func onRefresh()
+    {
+        
+        TodoStore.sharedInstance.checkForUpdates() {
+            self.postRefresh()
+        }
     }
     
     func listWasSelected(list : TodoList) {

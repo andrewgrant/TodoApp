@@ -39,7 +39,7 @@ class EditListViewController : UITableViewController
             
             var error : NSError?
             
-            TodoStore.sharedInstance.saveList(editList, error: &error)
+            TodoStore.sharedInstance.saveObject(editList, error: &error)
             
             if error != nil {
                 println(error!.description)

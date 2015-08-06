@@ -11,17 +11,13 @@ import CoreGraphics
 import UIKit
 
 
-class TodoList : NSObject, NSCoding, Hashable {
+class TodoList : TodoItem  {
     
-    var uuid : String?
-    var title : String
-    var CGColor : CGColorRef
+    
+    var title : String!
+    var CGColor : CGColorRef!
     var immutable = false
-    
-    override var hashValue : Int {
-        return uuid!.hashValue
-    }
-    
+        
     init (title : String) {
         self.title = title
         
@@ -31,34 +27,33 @@ class TodoList : NSObject, NSCoding, Hashable {
         super.init()
     }
     
-    deinit {
-        //CFRelease(CGColor)
+    required init(record: RemoteRecord) {
+        super.init(record: record)
     }
     
-    required init(coder aDecoder: NSCoder) {
-        self.uuid = aDecoder.decodeObjectForKey("uuid") as? String
-        self.title = aDecoder.decodeObjectForKey("title") as! String
+    override func decodeSelf(record: RemoteRecord) {
+        self.title = record["title"] as! String
         
-        let colorArray = aDecoder.decodeObjectForKey("CGColor") as! [CGFloat]
-        self.CGColor = CGColorCreate(CGColorSpaceCreateDeviceRGB(), colorArray)
-        self.immutable = aDecoder.decodeBoolForKey("immutable")
-                
-        super.init()
+        if record["CGColor"] != nil {
+            let colorArray = record["CGColor"] as! [CGFloat]
+            self.CGColor = CGColorCreate(CGColorSpaceCreateDeviceRGB(), colorArray)
+            self.immutable = record["immutable"] as! Bool
+        }
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
+    override func encodeSelf(record: RemoteRecord) {
+        
+        super.encodeSelf(record)
         
         let colors = CGColorGetComponents(CGColor)
         let colorBuffer = UnsafeBufferPointer(start: colors, count: 4)
         let colorArray = [CGFloat](colorBuffer)
+
+        record.setObject(self.title, forKey: "title")
         
-        aCoder.encodeObject(uuid, forKey: "uuid")
-        aCoder.encodeObject(title, forKey: "title")
-        aCoder.encodeObject(colorArray, forKey: "CGColor")
-        aCoder.encodeBool(immutable, forKey: "immutable")
-    }    
+        record["title"] = self.title
+        record["immutable"] = self.immutable
+        record["CGColor"] = colorArray
+    }
 }
 
-func ==(lhs : TodoList, rhs : TodoList) -> Bool {
-    return lhs.hashValue == rhs.hashValue
-}

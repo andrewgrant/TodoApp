@@ -38,7 +38,7 @@ class ListsViewController : BaseListsViewController {
         let calendar = self.sortedLists[indexPath.row]
         
         var error : NSError?
-        TodoStore.sharedInstance.removeList(calendar, error: &error)
+        TodoStore.sharedInstance.removeObject(calendar, error: &error)
         
         if error != nil {
             let text = error!.description

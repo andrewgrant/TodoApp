@@ -13,7 +13,7 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
     // MARK: Properties
     
     var list : TodoList?
-    var items = [TodoItem]()
+    var items = [TodoEntry]()
     
     @IBOutlet var editBarButton : UIBarButtonItem!
     
@@ -68,7 +68,7 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
         item.completed = !item.completed
         sender.setTitle(item.completed ? "🔳" : "◻️", forState: UIControlState.Normal)
         
-        TodoStore.sharedInstance.saveItem(item, error: nil)
+        TodoStore.sharedInstance.saveObject(item, error: nil)
     }
     
     
@@ -78,7 +78,7 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
         
             if let newItems = TodoStore.sharedInstance.itemsInList(list) {
                 self.items = newItems.sorted({ (lhs, rhs) -> Bool in
-                    return lhs.creationDate.compare(rhs.creationDate) == NSComparisonResult.OrderedAscending
+                    return lhs.title.compare(rhs.title) == NSComparisonResult.OrderedAscending
                 })
             }
         }
@@ -137,7 +137,7 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
             let rem = self.items[indexPath.row]
             
             var error : NSError?
-            TodoStore.sharedInstance.removeItem(rem, error: &error)
+            TodoStore.sharedInstance.removeObject(rem, error: &error)
             
             if error != nil {
                 let msg = UIAlertController(title: nil, message: "Error Deleting Reminder: " + error!.description, preferredStyle: UIAlertControllerStyle.Alert)

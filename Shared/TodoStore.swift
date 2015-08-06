@@ -9,67 +9,120 @@
 import Foundation
 
 
-class TodoStore : NSObject {
+class TodoStore : LocalStorage {
+    
+    
+    static let TSObjectsUpdatedNotification = "TSObjectsUpdatedNotification"
+    static let TSObjectsRemovedNotification = "TSObjectsRemovedNotification"
     
     static let sharedInstance = TodoStore()
+    private var _itemCache = [String:TodoItem]()
+    private var _dates = [String:NSDate]()
+
+    var cloudStorage : CloudStorage?
     
-    private var _lists = [TodoList]()
-    private var _items = [String:[TodoItem]]()
     
     var lists : [TodoList] {
-        return _lists
+        return self.filteredLists({ (item) -> Bool in
+            return true
+        })
     }
     
-    var items : [String:[TodoItem]] {
-        return _items
+    var itemCache : [String:TodoItem] {
+        return _itemCache
     }
     
-    override init () {
-        super.init()
+    init () {
+
     }
     
-    
-    func removeList(list : TodoList, error : NSErrorPointer) {
+    func checkForUpdates(completion : ((Void) -> Void)?) {
         
-        // remove from our list of lists
-        if let uuid = list.uuid {
+        let types = ["TodoList", "TodoEntry"]
+        
+        for type in types {
             
-            if let index = find(_lists, list) {
-                _lists.removeAtIndex(index)
-            }
-            
-            // remove items
-            if _items[uuid] != nil {
-                _items[uuid] = nil
+            cloudStorage?.checkForChanges(type, sinceDate:_dates[type]) { error in
+                self._dates[type] = NSDate()
             }
         }
+        
+        completion?()
+        
     }
     
-    func saveList(list : TodoList, error : NSErrorPointer) {
+    func decodeObject(type: String, record: RemoteRecord) -> SyncableItem? {
+    
+        let uuid = record["uuid"] as! String
+        
+        var item = _itemCache[uuid]
+        
+        if item == nil {
+            
+            switch type {
+                case "TodoList":
+                    item = TodoList(title:"tmp")
+                    break
+                
+                case "TodoEntry":
+                    item = TodoEntry(title:"tmp")
+                    break
+                    
+                default:
+                    break
+            }
+            
+            item!.uuid = uuid
+            _itemCache[uuid] = item
+        }
+        
+        item?.decodeSelf(record)
+    
+        return item
+    }
+    
+    func objectsWereUpdated(objs : [String]) {
+        // TODO - mark dirty in local store?
+        
+        let dict = ["uuids" : objs]
+        NSNotificationCenter.defaultCenter().postNotificationName(TodoStore.TSObjectsUpdatedNotification, object: self, userInfo: dict)
+    }
+    
+    func objectsWereRemoved(objs : [String]) {
+        
+        // remove from cache
+        objs.map {
+            self._itemCache[$0] = nil
+        }
+        
+        let dict = ["uuids" : objs]
+        NSNotificationCenter.defaultCenter().postNotificationName(TodoStore.TSObjectsRemovedNotification, object: self, userInfo: dict)
+    }
+
+    
+    private func internalSaveObject(obj: TodoItem, error : NSErrorPointer) {
         
         // assign a UUID if it doesn't have one
-        if list.uuid == nil {
-            list.uuid = NSUUID().UUIDString
+        if obj.uuid == nil {
+            obj.uuid = NSUUID().UUIDString
         }
         
-        if contains(_lists, list) == false {
-            _lists.append(list)
-            _items[list.uuid!] = [TodoItem]()
-        }
+        _itemCache[obj.uuid] = obj
+        
+        // start cloud save
+        cloudStorage?.saveObject(obj, completion:nil)
+    }
+
+    
+    func saveObject(obj: TodoItem, error : NSErrorPointer) {
+        internalSaveObject(obj, error: error)
     }
     
-    func saveItem(item : TodoItem, error : NSErrorPointer) {
+    
+    func saveObject(obj: TodoEntry, error : NSErrorPointer) {
         
-        if let parentUuid = item.parentUuid {
-            
-            // If list has a UUID the map should have an array
-            if item.uuid == nil {
-                item.uuid = NSUUID().UUIDString
-            }
-            
-            if contains(_items[parentUuid]!, item) == false {
-                _items[parentUuid]!.append(item)
-            }
+        if let parentUuid = obj.parentUuid {
+            internalSaveObject(obj, error: error)
         }
         else  {
             
@@ -82,34 +135,69 @@ class TodoStore : NSObject {
             println(errorVal.description)
         }
     }
-    
-    func removeItem(item: TodoItem, error : NSErrorPointer) {
+
+    func removeObject(item: TodoItem, error : NSErrorPointer) {
         
-        if let parentUuid = item.parentUuid {
-            if let arr = _items[parentUuid] {
-                if let index = find(arr, item) {
-                    _items[parentUuid]!.removeAtIndex(index)
+        if item is TodoList {
+            let list = item as! TodoList
+            
+            for entry in self.itemsInList(list)! {
+                removeObject(entry, error: nil)
+            }
+        }
+        
+        _itemCache.removeValueForKey(item.uuid)
+        
+        cloudStorage?.deleteObject(item, completion: nil)
+    }
+    
+    
+    func filteredLists( pred : (item : TodoList) -> Bool) -> [TodoList] {
+        
+        var lists = [TodoList]()
+        
+        for entry in _itemCache.values.array {
+            if entry is TodoList {
+                let list = entry as! TodoList
+                if pred(item: list) {
+                    lists.append(list)
                 }
             }
         }
+        
+        return lists
     }
     
-    func listFromUuid(uuid : String) -> TodoList? {
-        for list in _lists {
-            if list.uuid!.lowercaseString == uuid.lowercaseString {
-                return list
+    func filteredItems( pred : (item : TodoEntry) -> Bool) -> [TodoEntry] {
+        
+        var items = [TodoEntry]()
+        
+        for entry in _itemCache.values.array {
+            if entry is TodoEntry {
+                let item = entry as! TodoEntry
+                if pred(item: item) {
+                    items.append(item)
+                }
             }
         }
         
-        return nil
+        return items
     }
+
     
-    func itemsInList(list : TodoList) -> [TodoItem]? {
-        if let uuid = list.uuid {
-            return _items[uuid]
+    func itemsInList(list : TodoList) -> [TodoEntry]? {
+
+        let allObjects = _itemCache.values.array
+            
+        let filtered = allObjects.filter() {
+            if let entry = $0 as? TodoEntry {
+                return entry.parentUuid == list.uuid
+            }
+            
+            return false
         }
         
-        return nil
+        return filtered as? [TodoEntry]
     }
     
     private func documentLocation() -> NSURL {
@@ -118,80 +206,5 @@ class TodoStore : NSObject {
         
         return directories.first as! NSURL
     }
-    
-    func loadDocument() {
-        let path = documentLocation().URLByAppendingPathComponent("Todo.dat")
-
-        if let data = NSData(contentsOfURL: path) {
-            
-            let archive = NSKeyedUnarchiver(forReadingWithData: data)
-            
-            if let newLists = archive.decodeObjectForKey("lists") as? [TodoList] {
-                _lists = newLists
-            }
-            else {
-                _lists = [TodoList]()
-            }
-            
-            if let newItems = archive.decodeObjectForKey("items") as? [String:[TodoItem]] {
-                _items = newItems
-            }
-            else {
-                _items = [String:[TodoItem]]()
-            }
-        }
-        
-        checkValidity(false)
-    }
-    
-    func saveDocument() {
-        
-        let path = documentLocation().URLByAppendingPathComponent("Todo.dat")
-        
-        let data = NSMutableData()
-        let archive = NSKeyedArchiver(forWritingWithMutableData: data)
-
-        archive.encodeObject(_lists, forKey: "lists")
-        archive.encodeObject(_items, forKey: "items")
-        
-        archive.finishEncoding()
-        
-        data.writeToURL(path, atomically: true)        
-    }
-    
-    func checkValidity(andDie : Bool) {
-        for list in _lists {
-            if list.uuid == nil {
-                assertionFailure("List has no assigned uuid")
-            }
-            else {
-                if _items[list.uuid!] == nil {
-                    assertionFailure(String(format: "List with UUID %@ has no entry in item hashmap!", list.uuid!))
-                }
-            }
-        }
-        
-        for key in _items.keys {
-            for item in _items[key]! {
-                if item.uuid == nil {
-                    assertionFailure("Item has no assigned uuid")
-                }
-            }
-        }
-    }
-    
-    func fixup() {
-        
-        for list in _lists {
-            if list.uuid == nil {
-                list.uuid = NSUUID().UUIDString
-            }
-            
-            if _items[list.uuid!] == nil {
-                _items[list.uuid!] = [TodoItem]()
-            }
-        }
-    }
-    
 }
 
