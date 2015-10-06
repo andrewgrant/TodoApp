@@ -47,7 +47,7 @@ class BaseListsViewController : UITableViewController
     func postRefresh(){
         let objs = TodoStore.sharedInstance.lists
         
-        self.sortedLists = objs.sorted({ (lhs, rhs) -> Bool in
+        self.sortedLists = objs.sort({ (lhs, rhs) -> Bool in
             lhs.title < rhs.title
         })
         
@@ -87,7 +87,7 @@ class BaseListsViewController : UITableViewController
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell = tableView.dequeueReusableCellWithIdentifier("ReminderList") as? UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("ReminderList")
         
         let cal = sortedLists[indexPath.row]
         

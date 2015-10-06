@@ -25,8 +25,8 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
         self.title = list?.title
         
         let rc = UIRefreshControl()
-        refreshControl?.addTarget(self, action: Selector("onRefresh:"), forControlEvents: UIControlEvents.ValueChanged)
-        self.refreshControl = refreshControl
+        rc.addTarget(self, action: Selector("onRefresh:"), forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl = rc
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -45,7 +45,7 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
                 controller.item = self.items[indexPath.row]
             }
             else if let tf = sender as? UITextField {
-                controller.defaultReminderName = tf.text
+                controller.defaultReminderName = tf.text!
             }
             
             controller.owningList = self.list
@@ -77,7 +77,7 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
         if let list = self.list {
         
             if let newItems = TodoStore.sharedInstance.itemsInList(list) {
-                self.items = newItems.sorted({ (lhs, rhs) -> Bool in
+                self.items = newItems.sort({ (lhs, rhs) -> Bool in
                     return lhs.title.compare(rhs.title) == NSComparisonResult.OrderedAscending
                 })
             }
@@ -90,7 +90,7 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
     // MARK: - Textfield Delegate
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         
-        if count(textField.text) > 0 {
+        if textField.text?.characters.count > 0 {
             self.performSegueWithIdentifier("AddReminder", sender: textField)
         }
         return true
@@ -124,7 +124,7 @@ class RemindersListViewController : UITableViewController, UITextFieldDelegate
         }
         else
         {
-            cell = tableView.dequeueReusableCellWithIdentifier("CreateCell")! as! UITableViewCell
+            cell = tableView.dequeueReusableCellWithIdentifier("CreateCell")! 
             if let textField = cell.contentView.subviews.first as? UITextField {
                 textField.text = nil
             }

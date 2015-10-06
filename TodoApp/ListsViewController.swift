@@ -50,7 +50,7 @@ class ListsViewController : BaseListsViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, canPerformAction action: Selector, forRowAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject) -> Bool
+    override func tableView(tableView: UITableView, canPerformAction action: Selector, forRowAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool
     {
         let cal = self.sortedLists[indexPath.row]
         

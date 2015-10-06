@@ -35,7 +35,7 @@ class TodoAppTests: XCTestCase {
         
         XCTAssert(error == nil, "Failed to save list")
         
-        XCTAssert(count(store.lists) == 1, "TodoStore has wrong list count")
+        XCTAssert(store.lists.count == 1, "TodoStore has wrong list count")
     }
     
     func testNewItem() {
@@ -81,12 +81,12 @@ class TodoAppTests: XCTestCase {
         newItem.parentUuid = newList.uuid
         store.saveObject(newItem, error: nil)
         
-        XCTAssertTrue(count(store.lists) == 1, "Incorrect list count");
-        XCTAssertTrue(count(store.itemsInList(newList)!) == 1, "Incorrect item count");
+        XCTAssertTrue(store.lists.count == 1, "Incorrect list count");
+        XCTAssertTrue((store.itemsInList(newList)!).count == 1, "Incorrect item count");
         
         store.removeObject(newList, error: nil)
         
-        XCTAssertTrue(count(store.lists) == 0, "List count was not zero");
+        XCTAssertTrue(store.lists.count == 0, "List count was not zero");
 
         // check that item is also gone
         
@@ -103,13 +103,13 @@ class TodoAppTests: XCTestCase {
         newItem.parentUuid = newList.uuid
         store.saveObject(newItem, error: nil)
         
-        XCTAssertTrue(count(store.lists) == 1, "Incorrect list count");
-        XCTAssertTrue(count(store.itemsInList(newList)!) == 1, "Incorrect item count");
+        XCTAssertTrue(store.lists.count == 1, "Incorrect list count");
+        XCTAssertTrue((store.itemsInList(newList)!).count == 1, "Incorrect item count");
         
         store.removeObject(newItem, error: nil)
         
         // check list
-        XCTAssertTrue(count(store.itemsInList(newList)!) == 0, "Incorrect item count");
+        XCTAssertTrue((store.itemsInList(newList)!).count == 0, "Incorrect item count");
         
         // check cache directly
         //let listCache = store.items[newList.uuid!]!

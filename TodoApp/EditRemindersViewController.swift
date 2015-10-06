@@ -46,7 +46,7 @@ class EditReminderViewController : UITableViewController
         let userInfo = notification.userInfo as? [String: AnyObject]
         
         if let uuids = userInfo?["uuids"] as? [String] {
-            if find(uuids, item.uuid) != nil {
+            if uuids.indexOf(item.uuid) != nil {
                 updateObject()
             }
         }
@@ -72,7 +72,7 @@ class EditReminderViewController : UITableViewController
         
         if let item = self.item {
             
-            if count(self.eventNameTextField.text) > 0 {
+            if self.eventNameTextField.text!.characters.count > 0 {
                 item.title = eventNameTextField.text
             }
             
@@ -101,7 +101,7 @@ class EditReminderViewController : UITableViewController
     
     // MARK: - Actions
     @IBAction func onSave(sender : UIBarButtonItem?) {
-        if count(self.eventNameTextField.text) == 0 {
+        if self.eventNameTextField.text!.characters.count == 0 {
             self.eventNameTextField.text = self.defaultReminderName
         }
         self.navigationController?.popViewControllerAnimated(true)

@@ -91,7 +91,7 @@ class TodoStore : LocalStorage {
     func objectsWereRemoved(objs : [String]) {
         
         // remove from cache
-        objs.map {
+       _ = objs.map {
             self._itemCache[$0] = nil
         }
         
@@ -121,7 +121,7 @@ class TodoStore : LocalStorage {
     
     func saveObject(obj: TodoEntry, error : NSErrorPointer) {
         
-        if let parentUuid = obj.parentUuid {
+        if let _ = obj.parentUuid {
             internalSaveObject(obj, error: error)
         }
         else  {
@@ -132,7 +132,7 @@ class TodoStore : LocalStorage {
             if error != nil {
                 error.memory = errorVal
             }
-            println(errorVal.description)
+            print(errorVal.description)
         }
     }
 
@@ -156,7 +156,7 @@ class TodoStore : LocalStorage {
         
         var lists = [TodoList]()
         
-        for entry in _itemCache.values.array {
+        for entry in Array(_itemCache.values) {
             if entry is TodoList {
                 let list = entry as! TodoList
                 if pred(item: list) {
@@ -172,7 +172,7 @@ class TodoStore : LocalStorage {
         
         var items = [TodoEntry]()
         
-        for entry in _itemCache.values.array {
+        for entry in Array(_itemCache.values) {
             if entry is TodoEntry {
                 let item = entry as! TodoEntry
                 if pred(item: item) {
@@ -187,7 +187,7 @@ class TodoStore : LocalStorage {
     
     func itemsInList(list : TodoList) -> [TodoEntry]? {
 
-        let allObjects = _itemCache.values.array
+        let allObjects = Array(_itemCache.values)
             
         let filtered = allObjects.filter() {
             if let entry = $0 as? TodoEntry {
@@ -203,8 +203,8 @@ class TodoStore : LocalStorage {
     private func documentLocation() -> NSURL {
         
         let directories = NSFileManager.defaultManager().URLsForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomains: NSSearchPathDomainMask.UserDomainMask)
-        
-        return directories.first as! NSURL
+               
+        return directories.first!
     }
 }
 

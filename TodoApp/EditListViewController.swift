@@ -34,7 +34,7 @@ class EditListViewController : UITableViewController
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if editList != nil && count(titleTextField.text) > 0 {
+        if editList != nil && titleTextField.text?.characters.count > 0 {
             editList.title = titleTextField.text
             
             var error : NSError?
@@ -42,7 +42,7 @@ class EditListViewController : UITableViewController
             TodoStore.sharedInstance.saveObject(editList, error: &error)
             
             if error != nil {
-                println(error!.description)
+                print(error!.description)
             }
         }
     }
@@ -51,10 +51,10 @@ class EditListViewController : UITableViewController
     
     @IBAction func onSave(sender : UIBarButtonItem)
     {
-        if count(titleTextField.text) > 0 {
+        if titleTextField.text?.characters.count > 0 {
             
             // create a new list, it will be saved when we disappear
-            editList = TodoList(title: titleTextField.text)
+            editList = TodoList(title: titleTextField.text!)
             
             self.navigationController?.popViewControllerAnimated(true)
         }

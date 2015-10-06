@@ -9,11 +9,11 @@
 /* Begin PBXBuildFile section */
 		490BA6751B58C7D10041063E /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490BA6741B58C7D10041063E /* Logging.swift */; };
 		490BA6761B58C7D10041063E /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490BA6741B58C7D10041063E /* Logging.swift */; };
+		4936CF581B7C1C5400FF299E /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4936CF571B7C1C5400FF299E /* CloudKit.framework */; };
 		49559BF61B4763CA0007E6A1 /* SyncableItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49559BF51B4763CA0007E6A1 /* SyncableItem.swift */; };
 		49559BF71B4763CA0007E6A1 /* SyncableItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49559BF51B4763CA0007E6A1 /* SyncableItem.swift */; };
 		4968D8221B5CA83D00EB4B61 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4968D8211B5CA83D00EB4B61 /* Protocols.swift */; };
 		4968D8231B5CA83D00EB4B61 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4968D8211B5CA83D00EB4B61 /* Protocols.swift */; };
-		49739FBD1B43B617004DED4C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49739FBC1B43B617004DED4C /* CloudKit.framework */; };
 		498384841B43BA0C0008814B /* CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498384831B43BA0C0008814B /* CloudKit.swift */; };
 		498384851B43BA0C0008814B /* CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498384831B43BA0C0008814B /* CloudKit.swift */; };
 		49C14A7C1B39AF1600BD80D9 /* TodoAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C14A7A1B39AF1600BD80D9 /* TodoAppTests.swift */; };
@@ -52,10 +52,10 @@
 		490BA6741B58C7D10041063E /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		491500D41B14C3F700D0A36B /* TodoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		491500E91B14C3F700D0A36B /* TodoAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodoAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4936CF571B7C1C5400FF299E /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		49559BF51B4763CA0007E6A1 /* SyncableItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncableItem.swift; sourceTree = "<group>"; };
 		4968D8211B5CA83D00EB4B61 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		49739FBB1B43B610004DED4C /* TodoApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TodoApp.entitlements; sourceTree = "<group>"; };
-		49739FBC1B43B617004DED4C /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		498384831B43BA0C0008814B /* CloudKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudKit.swift; sourceTree = "<group>"; };
 		49C14A7A1B39AF1600BD80D9 /* TodoAppTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoAppTests.swift; sourceTree = "<group>"; };
 		49C14A7B1B39AF1600BD80D9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -82,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49739FBD1B43B617004DED4C /* CloudKit.framework in Frameworks */,
+				4936CF581B7C1C5400FF299E /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,7 +99,7 @@
 		491500CB1B14C3F700D0A36B = {
 			isa = PBXGroup;
 			children = (
-				49739FBC1B43B617004DED4C /* CloudKit.framework */,
+				4936CF571B7C1C5400FF299E /* CloudKit.framework */,
 				49C14A9B1B39B18B00BD80D9 /* Shared */,
 				49C14A7E1B39AF2B00BD80D9 /* TodoApp */,
 				49C14A791B39AF1600BD80D9 /* TodoAppTests */,
@@ -204,7 +204,9 @@
 		491500CC1B14C3F700D0A36B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Code Before Dawn, Inc";
 				TargetAttributes = {
 					491500D31B14C3F700D0A36B = {
@@ -353,6 +355,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -421,10 +424,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TodoApp/TodoApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = TodoApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.codebeforedawn.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -433,10 +440,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TodoApp/TodoApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = TodoApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.codebeforedawn.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -445,16 +456,13 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = TodoAppTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.codebeforedawn.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -465,12 +473,9 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
 				INFOPLIST_FILE = TodoAppTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.codebeforedawn.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};

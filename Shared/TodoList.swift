@@ -21,7 +21,7 @@ class TodoList : TodoItem  {
     init (title : String) {
         self.title = title
         
-        var floats : [CGFloat] = [0,0,0,1]
+        let floats : [CGFloat] = [0,0,0,1]
         self.CGColor = CGColorCreate(CGColorSpaceCreateDeviceRGB(), floats)
         
         super.init()

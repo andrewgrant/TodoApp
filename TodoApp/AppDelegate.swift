@@ -30,17 +30,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         
         Logger.app.info("Received Notification")
         
-        let cloudNote = CKNotification(fromRemoteNotificationDictionary: userInfo)
+        if let userInfo = userInfo as? [String : NSObject] {
         
-        if cloudNote.notificationType == CKNotificationType.Query {
+            let cloudNote = CKNotification(fromRemoteNotificationDictionary: userInfo)
             
-            let recordID = (cloudNote as! CKQueryNotification).recordID
-            
-            CloudKit.sharedInstance.notifyObjectUpdated(recordID)
+            if cloudNote.notificationType == CKNotificationType.Query {
+                
+                let recordID = (cloudNote as! CKQueryNotification).recordID
+                
+                CloudKit.sharedInstance.notifyObjectUpdated(recordID!)
+            }
         }
         
     }

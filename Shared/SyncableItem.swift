@@ -27,7 +27,7 @@ class SyncableItem : Hashable {
     }
     
     func typeName() -> String {
-        let fullName = toString(self).componentsSeparatedByString(".")
+        let fullName = String(self).componentsSeparatedByString(".")
         return fullName[1]
     }
     

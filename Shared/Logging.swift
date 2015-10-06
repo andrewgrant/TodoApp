@@ -41,7 +41,7 @@ class Channel {
         let str = prefix + String(format: format, arguments: args)
         
         objc_sync_enter(self.logger)
-        println(str)
+        Swift.print(str)
         objc_sync_exit(self.logger)
     }
 }
